@@ -35,14 +35,9 @@ events = read_events_from_csv('events.csv')
 # Meetup API key
 api_key = os.getenv('MEETUP_API_KEY')
 
-# Group URL name
-group_urlname = 'your_group_urlname'
-
-# Define the URL for creating an event
-url = f'https://api.meetup.com/{group_urlname}/events'
-
 # Iterate over each event and post it to Meetup
 for event in events:
+    group_urlname = event['group_urlname']
     event_name = event['name']
     event_description = event['description']
     event_time = int(datetime.strptime(event['time'], '%Y-%m-%d %H:%M:%S').timestamp() * 1000)
@@ -70,6 +65,11 @@ for event in events:
     # Add photo_id to event_data if it exists
     if photo_id:
         event_data['photo_id'] = photo_id
+
+    # Preview the event details
+
+    # Define the URL for creating an event
+    url = f'https://api.meetup.com/{group_urlname}/events'
 
     # Make the POST request to create the event
     response = requests.post(url, json=event_data, headers={'Authorization': f'Bearer {api_key}'})
